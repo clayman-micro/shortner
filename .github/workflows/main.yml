@@ -20,4 +20,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          args: The ${{ github.event_name }} event triggered first step ${{ job.status }}.
+          args: ${{ github.repository }} event ${{ github.event_name }} status - ${{ job.status }}.
