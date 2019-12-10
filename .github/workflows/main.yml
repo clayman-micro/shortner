@@ -15,9 +15,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}    
       
-      - uses: yanzay/notify-telegram@v0.1.0
-        if: always()
+      - name: send custom message with args
+        uses: appleboy/telegram-action@master
         with:
-          chat: ${{ secrets.TELEGRAM_CHAT }} # user id or channel name secret
-          token: ${{ secrets.TELEGRAM_TOKEN }} # token secret
-          status: ${{ job.status }} # do not modify this line
+          to: ${{ secrets.TELEGRAM_CHAT }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: The ${{ github.event_name }} event triggered first step.
