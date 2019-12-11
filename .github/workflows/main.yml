@@ -27,7 +27,9 @@ jobs:
       #     username: ${{ secrets.DOCKER_USERNAME }}
       #     password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: send custom message with args
+
+      - name: Send notification to Telegram
+        if: failure()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT }}
