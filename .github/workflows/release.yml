@@ -1,8 +1,9 @@
 name: Release and deploy
 
 on:
-  release:
-    types: [published]
+  create:
+    tags:
+      - v*
 
 jobs:
   build:
