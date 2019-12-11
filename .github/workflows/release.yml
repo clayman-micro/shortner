@@ -1,9 +1,8 @@
 name: Release and deploy
 
 on:
-  push:
-    tags:
-      - 'refs/tags/*'
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -29,6 +28,7 @@ jobs:
           name: clayman083/shortner
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tag_names: true
 
       - name: Send notification to Telegram
         if: always()
