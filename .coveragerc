@@ -1,0 +1,13 @@
+
+[run]
+branch = True
+omit =
+    shortner/management/*
+
+source = shortner
+
+[html]
+directory = tests/coverage
+
+[xml]
+output = tests/coverage.xml
