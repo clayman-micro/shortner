@@ -43,11 +43,14 @@ nosetests.xml
 
 # Mr Developer
 .cache
+.env
 .project
 .pydevproject
 .idea
 .containers
 .mypy_cache
+.venv
+.vscode/.ropeproject
 *.retry
 *.sublime-project
 *.sublime-workspace
