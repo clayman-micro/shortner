@@ -1,7 +1,7 @@
 import asyncio
 
 import click
-import structlog
+import structlog  # type: ignore
 import uvloop  # type: ignore
 
 from shortner.app import AppConfig, init
@@ -12,7 +12,7 @@ structlog.configure(
     processors=[
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.JSONRenderer(),
-    ],
+    ]
 )
 
 
