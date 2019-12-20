@@ -1,12 +1,12 @@
 import socket
 
+import config  # type: ignore
 import pkg_resources
 import sentry_sdk
 from aiohttp import web
 from aiohttp_metrics import setup as setup_metrics  # type: ignore
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
-from shortner import config
 from shortner.handlers import meta
 from shortner.middlewares import catch_exceptions_middleware
 

@@ -31,8 +31,8 @@ install: clean
 	pipenv install --dev -e .
 
 lint:
-	pipenv run flake8 shortner tests
-	pipenv run mypy shortner tests
+	poetry run flake8 shortner tests
+	poetry run mypy shortner tests
 
 test:
 	py.test

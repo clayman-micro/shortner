@@ -4,15 +4,13 @@ RUN apk add --update --no-cache --quiet \
         make libc-dev python3-dev libffi-dev linux-headers gcc g++ git \
         postgresql-dev && \
     python3 -m pip install --no-cache-dir --quiet -U pip && \
-    python3 -m pip install --no-cache-dir --quiet pipenv
+    python3 -m pip install --no-cache-dir --quiet poetry
 
 ADD . /app
 
 WORKDIR /app
 
-RUN pipenv install --dev && \
-    pipenv lock -r > requirements.txt && \
-    pipenv run python setup.py bdist_wheel
+RUN poetry build
 
 
 FROM python:3.7-alpine3.10
@@ -31,4 +29,4 @@ RUN apk add --update --no-cache --quiet \
 
 EXPOSE 5000
 
-CMD ["pipenv", "run", "python3", "-m", "shortner", "server", "run", "--host=0.0.0.0"]
+CMD ["python3", "-m", "shortner", "server", "run", "--host=0.0.0.0"]
