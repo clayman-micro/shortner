@@ -1,10 +1,19 @@
 import asyncio
 
 import click
+import structlog
 import uvloop  # type: ignore
 
 from shortner.app import AppConfig, init
 from shortner.management.server import server
+
+
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer(),
+    ],
+)
 
 
 @click.group()
@@ -14,12 +23,14 @@ def cli(ctx, debug):
     uvloop.install()
     loop = asyncio.get_event_loop()
 
+    logger = structlog.get_logger()
+
     config = AppConfig()
     config.load_from_env()
 
     config.debug = debug
 
-    app = loop.run_until_complete(init("shortner", config))
+    app = loop.run_until_complete(init("shortner", config, logger))
 
     ctx.obj["app"] = app
     ctx.obj["config"] = config

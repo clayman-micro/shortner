@@ -47,6 +47,12 @@ def run(ctx, host, port):
 
     loop.run_until_complete(runner.setup())
 
+    app["logger"].info(
+        f"Serving application on http://{address}:{port}",
+        app_name=app["app_name"],
+        hostname=app["hostname"],
+    )
+
     try:
         site = web.TCPSite(runner, address, port)
         loop.run_until_complete(site.start())

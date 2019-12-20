@@ -18,9 +18,11 @@ class AppConfig(config.Config):
     sentry_dsn = config.StrField()
 
 
-async def init(app_name: str, config: AppConfig) -> web.Application:
+async def init(app_name: str, config: AppConfig, logger) -> web.Application:
     app = web.Application()
 
+    app["app_name"] = app_name
+    app["logger"] = logger
     app["config"] = config
     app["distribution"] = pkg_resources.get_distribution(app_name)
     app["hostname"] = socket.gethostname()
@@ -39,6 +41,12 @@ async def init(app_name: str, config: AppConfig) -> web.Application:
             web.get("/-/health", meta.health, name="health"),
             web.get("/-/meta", meta.index, name="index"),
         ]
+    )
+
+    app["logger"].info(
+        "Initialize application",
+        app_name=app["app_name"],
+        hostname=app["hostname"],
     )
 
     return app
