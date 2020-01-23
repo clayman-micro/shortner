@@ -27,9 +27,9 @@ async def init(app_name: str, config: AppConfig, logger) -> web.Application:
     app["distribution"] = pkg_resources.get_distribution(app_name)
     app["hostname"] = socket.gethostname()
 
-    if "config" in app and app["config"].sentry_dsn:
+    if config.sentry_dsn:
         sentry_sdk.init(
-            dsn=app["config"].sentry_dsn, integrations=[AioHttpIntegration()]
+            dsn=config.sentry_dsn, integrations=[AioHttpIntegration()]
         )
 
     setup_metrics(app, app_name=app_name)

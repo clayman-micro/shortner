@@ -51,6 +51,7 @@ nosetests.xml
 .mypy_cache
 .venv
 .vscode/.ropeproject
+.vscode/tags
 *.retry
 *.sublime-project
 *.sublime-workspace
