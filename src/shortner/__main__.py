@@ -2,7 +2,7 @@ import asyncio
 
 import click
 import uvloop  # type: ignore
-from aiohttp_micro.management.server import server
+from aiohttp_micro.management.server import server  # type: ignore
 
 from shortner.app import AppConfig, init
 
