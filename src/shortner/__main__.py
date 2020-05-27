@@ -3,13 +3,15 @@ import asyncio
 import click
 import structlog  # type: ignore
 import uvloop  # type: ignore
+from aiohttp_micro.management.server import server
+from config import ConsulConfig, EnvValueProvider, load
 
 from shortner.app import AppConfig, init
-from shortner.management.server import server
 
 
 structlog.configure(
     processors=[
+        structlog.stdlib.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.JSONRenderer(),
     ]
@@ -17,20 +19,19 @@ structlog.configure(
 
 
 @click.group()
-@click.option("--debug", default=False)
+@click.option("--debug", is_flag=True, default=False)
 @click.pass_context
-def cli(ctx, debug):
+def cli(ctx, debug: bool = False) -> None:
     uvloop.install()
     loop = asyncio.get_event_loop()
 
-    logger = structlog.get_logger()
+    consul_config = ConsulConfig()
+    load(consul_config, providers=[EnvValueProvider()])
 
-    config = AppConfig()
-    config.load_from_env()
+    config = AppConfig(defaults={"consul": consul_config, "debug": debug})
+    load(config, providers=[EnvValueProvider()])
 
-    config.debug = debug
-
-    app = loop.run_until_complete(init("shortner", config, logger))
+    app = loop.run_until_complete(init("shortner", config))
 
     ctx.obj["app"] = app
     ctx.obj["config"] = config

@@ -28,17 +28,20 @@ clean-test:
 	rm -f tests/coverage.xml
 
 install: clean
-	pipenv install --dev -e .
+	poetry install
+
+run:
+	poetry run python3 -m shortner --debug server run -t develop -t 'traefik.enable=true' -t 'traefik.http.routers.shortner.rule=Host(`shortner.dev.clayman.pro`)' -t 'traefik.http.routers.shortner.entrypoints=web' -t 'traefik.http.routers.shortner.service=shortner' -t 'traefik.http.routers.shortner.middlewares=shortner-redirect@consulcatalog' -t 'traefik.http.routers.shortner-secure.rule=Host(`shortner.dev.clayman.pro`)' -t 'traefik.http.routers.shortner-secure.entrypoints=websecure' -t 'traefik.http.routers.shortner-secure.service=shortner' -t 'traefik.http.routers.shortner-secure.tls=true' -t 'traefik.http.middlewares.shortner-redirect.redirectscheme.scheme=https' -t 'traefik.http.middlewares.shortner-redirect.redirectscheme.permanent=true'
 
 lint:
-	poetry run flake8 shortner tests
-	poetry run mypy shortner tests
+	poetry run flake8 src/shortner tests
+	poetry run mypy src/shortner tests
 
 test:
 	py.test
 
 test-all:
-	tox -- --pg-image=postgres:11-alpine
+	tox
 
 build:
 	docker build -t ${NAME} .
