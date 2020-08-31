@@ -1,8 +1,7 @@
-FROM python:3.7-alpine3.10 as build
+FROM python:3.8-alpine3.11 as build
 
 RUN apk add --update --no-cache --quiet \
-        make libc-dev python3-dev libffi-dev linux-headers gcc g++ git \
-        postgresql-dev && \
+        make libc-dev python3-dev libffi-dev linux-headers gcc g++ git && \
     python3 -m pip install --no-cache-dir --quiet -U pip && \
     python3 -m pip install --no-cache-dir --quiet poetry
 
@@ -13,20 +12,19 @@ WORKDIR /app
 RUN poetry build
 
 
-FROM python:3.7-alpine3.10
+FROM python:3.8-alpine3.11
 
 COPY --from=build /app/dist/*.whl .
 
 RUN apk add --update --no-cache --quiet \
-        make libc-dev python3-dev libffi-dev linux-headers gcc g++ git \
-        postgresql-client && \
+        make libc-dev python3-dev libffi-dev linux-headers gcc g++ git && \
     python3 -m pip install --no-cache-dir --quiet -U pip && \
     python3 -m pip install --no-cache-dir --quiet *.whl && \
-    # mkdir -p /usr/share/wallet && \
-    # cp /usr/local/lib/python3.7/site-packages/wallet/storage/sql/* /usr/share/wallet && \
     rm -f *.whl && \
     apk del --quiet make libc-dev python3-dev libffi-dev linux-headers gcc g++ git
 
 EXPOSE 5000
 
-CMD ["python3", "-m", "shortner", "server", "run", "--host=0.0.0.0"]
+ENTRYPOINT ["python3", "-m", "shortner"]
+
+CMD ["server", "run"]

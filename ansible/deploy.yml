@@ -1,0 +1,10 @@
+---
+
+- hosts: servers
+  become: true
+
+  tasks:
+    - name: Pull docker image
+      docker_image:
+        name: clayman083/shortner
+        source: pull

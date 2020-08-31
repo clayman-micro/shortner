@@ -51,6 +51,18 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: set ansible config secrets
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir .ssh
+          echo "$SSH_KEY" > .ssh/id_rsa
+          chmod 600 .ssh/id_rsa
+
+      - name: run deploy playbook
+        run: |
+          ansible-playbook -i ansible/inventory ansible/deploy.yml
+
       - name: Send notification to Telegram
         if: always()
         uses: appleboy/telegram-action@master
