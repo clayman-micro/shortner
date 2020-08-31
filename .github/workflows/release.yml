@@ -18,7 +18,7 @@ jobs:
 
       - name: Install requirements
         # Устанавливаем зависимости
-        run: pip install pipenv tox
+        run: pip install poetry tox
 
       - name: Run tests
         run: tox
