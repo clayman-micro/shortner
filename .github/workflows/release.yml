@@ -37,14 +37,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           tag_names: true
 
-      - name: Send notification to Telegram
-        if: always()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          args: ${{ github.repository }} event ${{ github.event_name }} status - ${{ job.status }}.
-
   deploy:
     needs: [publish_image]
     runs-on: ubuntu-latest
@@ -60,6 +52,8 @@ jobs:
           chmod 600 .ssh/id_rsa
 
       - name: run deploy playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
         run: |
           ansible-playbook -i ansible/inventory ansible/deploy.yml
 
