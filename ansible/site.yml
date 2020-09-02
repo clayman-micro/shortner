@@ -1,0 +1,38 @@
+---
+
+- hosts: servers
+  become: true
+
+  vars:
+    domain: clayman.pro
+
+    consul_host: consul.service.consul
+    consul_port: 8500
+
+    private_network: "{{ ansible_eth1['ipv4'] }}"
+
+    services_dir: /opt/services
+
+    shortner_domain: "short.{{ domain }}"
+    shortner_service_dir: "{{ services_dir }}/shortner"
+    shortner_sentry_dsn: ""
+
+    shortner_image: clayman083/shortner
+    shortner_version: "{{ lookup('env','SHORTNER_VERSION')|default('latest') }}"
+
+    shortner_stack: shortner
+
+    shortner_replicas: 1
+
+    shortner_container_name: shortner
+    shortner_container_dns: "{{ private_network.address }}"
+    shortner_container_networks:
+      - name: backend
+    shortner_container_restart: always
+    shortner_container_syslog:
+      enabled: true
+      host: unixgram:///dev/log
+      tag: shortner
+
+  roles:
+    - shortner

@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "shortner"
-version = "0.1.4-alpha.1"
+version = "0.1.4-alpha.5"
 description = ""
 authors = ["Kirill Sumorokov <sumorokov.k@gmail.com>"]
 packages = [
@@ -19,6 +19,7 @@ aiohttp-openapi = {git = "https://github.com/clayman083/aiohttp-openapi.git", re
 python = "^3.8"
 
 [tool.poetry.dev-dependencies]
+ansible = "2.9.13"
 black = "^19.10b0"
 coverage = "*"
 faker = "*"
@@ -29,6 +30,7 @@ flake8-comprehensions = "*"
 flake8-import-order = "*"
 flake8-print = "*"
 flake8-pytest = "*"
+jinja2 = "2.11.2"
 mypy = "*"
 pytest = "*"
 pytest-aiohttp = "*"

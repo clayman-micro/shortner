@@ -54,8 +54,9 @@ jobs:
       - name: run deploy playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
+          SHORTNER_VERSION: ${GITHUB_REF/refs\/tags\//}
         run: |
-          ansible-playbook -i ansible/inventory ansible/deploy.yml
+          ansible-playbook -i ansible/inventory ansible/site.yml --tags=deploy
 
       - name: Send notification to Telegram
         if: always()
