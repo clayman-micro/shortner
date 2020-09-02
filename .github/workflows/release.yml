@@ -51,10 +51,14 @@ jobs:
           echo "$SSH_KEY" > .ssh/id_rsa
           chmod 600 .ssh/id_rsa
 
-      - name: run deploy playbook
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Deploy new version
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
-          SHORTNER_VERSION: ${GITHUB_REF/refs\/tags\//}
+          SHORTNER_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
           ansible-playbook -i ansible/inventory ansible/site.yml --tags=deploy
 
