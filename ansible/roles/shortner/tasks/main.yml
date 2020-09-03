@@ -1,9 +1,0 @@
----
-
-- import_tasks: provision.yml
-  tags:
-    - provision
-
-- import_tasks: deploy.yml
-  tags:
-    - deploy
