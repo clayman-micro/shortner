@@ -49,4 +49,4 @@ build:
 
 publish:
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
-	docker push ${NAME}
+	docker push ${NAME}:$(VERSION)
