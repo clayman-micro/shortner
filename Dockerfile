@@ -1,6 +1,7 @@
 FROM python:3.8-slim as build
 
-RUN apt-get update && apt install -y -q \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y -q \
       build-essential python3-dev libffi-dev git && \
     python3 -m pip install --no-cache-dir --quiet -U pip && \
     python3 -m pip install --no-cache-dir --quiet poetry
@@ -16,7 +17,8 @@ FROM python:3.8-slim
 
 COPY --from=build /app/dist/*.whl .
 
-RUN apt-get update && apt install -y -q \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y -q \
       build-essential python3-dev libffi-dev git && \
     python3 -m pip install --no-cache-dir --quiet -U pip && \
     python3 -m pip install --no-cache-dir --quiet *.whl && \

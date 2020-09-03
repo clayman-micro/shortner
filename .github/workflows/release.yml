@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: set ansible config secrets
+      - name: Prepare ansible config secrets
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
@@ -60,7 +60,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: False
           SHORTNER_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          ansible-playbook -i ansible/inventory ansible/site.yml --tags=deploy
+          ansible-playbook -i ansible/inventory ansible/deploy.yml
 
       - name: Send notification to Telegram
         if: always()
@@ -68,4 +68,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          args: ${{ github.repository }} deploy - ${{ job.status }}.
+          args: ${{ github.repository }} deploy version `${{ steps.vars.outputs.tag }}` - ${{ job.status }}
