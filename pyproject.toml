@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "shortner"
-version = "0.1.4-alpha.7"
+version = "0.1.4-alpha.8"
 description = ""
 authors = ["Kirill Sumorokov <sumorokov.k@gmail.com>"]
 packages = [
