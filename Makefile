@@ -1,5 +1,5 @@
 .PHONY: build clean clean-test clean-pyc clean-build
-NAME	:= clayman083/shortner
+NAME	:= ghcr.io/clayman-micro/shortner
 VERSION ?= latest
 
 

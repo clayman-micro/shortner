@@ -14,7 +14,7 @@
     shortner_domain: "short.{{ domain }}"
     shortner_sentry_dsn: ""
 
-    shortner_image: clayman083/shortner
+    shortner_image: ghcr.io/clayman-micro/shortner
     shortner_version: "{{ lookup('env','SHORTNER_VERSION')|default('latest') }}"
 
     shortner_replicas: 1
