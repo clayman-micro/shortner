@@ -9,6 +9,9 @@
     consul_host: "consul.service.consul"
     consul_port: "8500"
 
+    docker_username: "{{ lookup('env','DOCKER_USERNAME') }}"
+    docker_password: "{{ lookup('env','DOCKER_PASSWORD') }}"
+
     private_network: "{{ ansible_eth1['ipv4'] }}"
 
     shortner_domain: "short.{{ domain }}"
@@ -20,6 +23,12 @@
     shortner_replicas: 1
 
   tasks:
+    - name: Log into private registry
+      docker_login:
+        registry: ghcr.io
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+
     - name: Pull image
       docker_image:
         name: "{{ shortner_image }}:{{ shortner_version }}"
