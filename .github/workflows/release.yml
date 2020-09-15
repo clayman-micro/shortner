@@ -59,6 +59,8 @@ jobs:
       - name: Deploy new version
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           SHORTNER_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
           ansible-playbook -i ansible/inventory ansible/deploy.yml
