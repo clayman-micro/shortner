@@ -1,7 +1,6 @@
 import click
 import structlog  # type: ignore
 import uvloop  # type: ignore
-
 from aiohttp_micro.management.server import server
 from config import ConsulConfig, EnvValueProvider, load
 
