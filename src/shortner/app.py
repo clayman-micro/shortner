@@ -81,7 +81,7 @@ async def add_short_url(request: web.Request) -> web.Response:
     return web.Response(status=200)
 
 
-async def init(app_name: str, config: AppConfig) -> web.Application:
+def init(app_name: str, config: AppConfig) -> web.Application:
     app = web.Application()
 
     setup_micro(app, app_name=app_name, config=config)

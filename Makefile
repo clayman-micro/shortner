@@ -31,7 +31,20 @@ install: clean
 	poetry install
 
 run:
-	poetry run python3 -m shortner --debug server run -t develop -t 'traefik.enable=true' -t 'traefik.http.routers.shortner.rule=Host(`shortner.dev.clayman.pro`)' -t 'traefik.http.routers.shortner.entrypoints=web' -t 'traefik.http.routers.shortner.service=shortner' -t 'traefik.http.routers.shortner.middlewares=shortner-redirect@consulcatalog' -t 'traefik.http.routers.shortner-secure.rule=Host(`shortner.dev.clayman.pro`)' -t 'traefik.http.routers.shortner-secure.entrypoints=websecure' -t 'traefik.http.routers.shortner-secure.service=shortner' -t 'traefik.http.routers.shortner-secure.tls=true' -t 'traefik.http.middlewares.shortner-redirect.redirectscheme.scheme=https' -t 'traefik.http.middlewares.shortner-redirect.redirectscheme.permanent=true'
+	poetry run python3 -m shortner --debug server run --host=0.0.0.0 \
+		--tags='develop' \
+		--tags='v0.2.4' \
+		--tags='traefik.enable=true' \
+		--tags='traefik.http.routers.shortner.rule=Host(`shortner.dev.clayman.pro`)' \
+		--tags='traefik.http.routers.shortner.entrypoints=web' \
+		--tags='traefik.http.routers.shortner.service=shortner' \
+		--tags='traefik.http.routers.shortner.middlewares=shortner-redirect@consulcatalog' \
+		--tags='traefik.http.routers.shortner-secure.rule=Host(`shortner.dev.clayman.pro`)' \
+		--tags='traefik.http.routers.shortner-secure.entrypoints=websecure' \
+		--tags='traefik.http.routers.shortner-secure.service=shortner' \
+		--tags='traefik.http.routers.shortner-secure.tls=true' \
+		--tags='traefik.http.middlewares.shortner-redirect.redirectscheme.scheme=https' \
+		--tags='traefik.http.middlewares.shortner-redirect.redirectscheme.permanent=true'
 
 lint:
 	poetry run flake8 src/shortner tests

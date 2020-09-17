@@ -25,12 +25,12 @@ def logger():
 
 
 @pytest.yield_fixture(scope="function")
-def app(loop, config, logger):
-    app = loop.run_until_complete(init("shortner", config, logger))
+async def app(config, logger):
+    app = init("shortner", config, logger)
     runner = web.AppRunner(app)
 
-    loop.run_until_complete(runner.setup())
+    await runner.setup()
 
     yield app
 
-    loop.run_until_complete(runner.cleanup())
+    await runner.cleanup()

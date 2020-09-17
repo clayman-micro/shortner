@@ -4,8 +4,6 @@
   become: true
 
   vars:
-    domain: clayman.pro
-
     consul_host: "consul.service.consul"
     consul_port: "8500"
 
@@ -40,7 +38,9 @@
         image: "{{ shortner_image }}:{{ shortner_version }}"
         command: python3 -m shortner server run
         args:
+          - "--host=0.0.0.0"
           - "--tags={{ env }}"
+          - "--tags={{ shortner_version }}"
           - "--tags=traefik.enable=true"
           - "--tags=traefik.http.routers.shortner.rule=Host(`{{ shortner_domain }}`)"
           - "--tags=traefik.http.routers.shortner.entrypoints=web"
@@ -66,6 +66,3 @@
         networks:
           - backend
         replicas: "{{ shortner_replicas|default(1) }}"
-        limits:
-          cpus: '0.50'
-          memory: 64M

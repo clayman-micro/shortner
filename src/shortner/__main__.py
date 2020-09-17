@@ -1,8 +1,7 @@
-import asyncio
-
 import click
 import structlog  # type: ignore
 import uvloop  # type: ignore
+
 from aiohttp_micro.management.server import server
 from config import ConsulConfig, EnvValueProvider, load
 
@@ -23,7 +22,6 @@ structlog.configure(
 @click.pass_context
 def cli(ctx, debug: bool = False) -> None:
     uvloop.install()
-    loop = asyncio.get_event_loop()
 
     consul_config = ConsulConfig()
     load(consul_config, providers=[EnvValueProvider()])
@@ -31,11 +29,10 @@ def cli(ctx, debug: bool = False) -> None:
     config = AppConfig(defaults={"consul": consul_config, "debug": debug})
     load(config, providers=[EnvValueProvider()])
 
-    app = loop.run_until_complete(init("shortner", config))
+    app = init("shortner", config)
 
     ctx.obj["app"] = app
     ctx.obj["config"] = config
-    ctx.obj["loop"] = loop
 
 
 cli.add_command(server, name="server")
