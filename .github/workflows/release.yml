@@ -52,8 +52,8 @@ jobs:
           roleId: ${{ secrets.VAULT_ROLE_ID }}
           secretId: ${{ secrets.VAULT_SECRET_ID }}
           secrets: |
-              secrets/services/ghcr user | DOCKER_USERNAME ;
-              secrets/services/ghcr password | DOCKER_PASSWORD
+              secrets/data/services/ghcr user | DOCKER_USERNAME ;
+              secrets/data/services/ghcr password | DOCKER_PASSWORD
 
       - name: Publish to Docker Repository
         uses: elgohr/Publish-Docker-Github-Action@master
