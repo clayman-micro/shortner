@@ -45,6 +45,7 @@ jobs:
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
       - name: Import Secrets
+        id: secrets
         uses: hashicorp/vault-action@v2.1.0
         with:
           url: ${{ secrets.VAULT_ADDR }}
