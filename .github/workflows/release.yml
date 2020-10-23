@@ -22,6 +22,10 @@ jobs:
       - name: Run tests
         run: tox
 
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Send notification to Telegram
         if: always()
         uses: appleboy/telegram-action@master
@@ -36,8 +40,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Import Secrets
-        uses: hashicorp/vault-action@v2.0.1
+        uses: hashicorp/vault-action@v2.1.0
         with:
           url: ${{ secrets.VAULT_ADDR }}
           method: approle
