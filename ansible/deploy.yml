@@ -1,5 +1,35 @@
 ---
 
+- hosts: localhost
+  tasks:
+    - name: Prepare folder for credentials
+      file:
+        path: "{{ inventory_dir }}/.credentials/{{ item }}/users/{{ hostvars[item]['ansible_user'] }}/"
+        state: directory
+        mode: 0755
+      with_items: "{{ groups['servers'] }}"
+
+    - name: Download private keys for servers
+      hashivault_read:
+        mount_point: "secrets"
+        secret: "nodes/{{ item }}/users/{{ hostvars[item]['ansible_user'] }}"
+        key: 'private_key'
+        version: 2
+      with_items: "{{ groups['servers'] }}"
+      loop_control:
+        label: "{{ item }}"
+      register: 'private_keys'
+
+    - name: Write private key to file
+      copy:
+        content: "{{ item.value }}"
+        dest: "{{ inventory_dir }}/.credentials/{{ item.item }}/users/{{ hostvars[item.item]['ansible_user'] }}/id_rsa"
+        mode: 0600
+      with_items: "{{ private_keys.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+
 - hosts: servers
   become: true
 
@@ -7,13 +37,14 @@
     consul_host: "consul.service.consul"
     consul_port: "8500"
 
-    docker_username: "{{ lookup('env','DOCKER_USERNAME') }}"
-    docker_password: "{{ lookup('env','DOCKER_PASSWORD') }}"
+    docker_registry: ghcr.io
+    docker_username: "{{ lookup('hashivault', 'services/ghcr', 'user', mount_point='/secrets', version=2) }}"
+    docker_password: "{{ lookup('hashivault', 'services/ghcr', 'password', mount_point='/secrets', version=2) }}"
 
     private_network: "{{ ansible_eth1['ipv4'] }}"
 
     shortner_domain: "short.{{ domain }}"
-    shortner_sentry_dsn: ""
+    shortner_sentry_dsn: "{{ lookup('hashivault', 'services/shortner', 'sentry_dsn', mount_point='/secrets', version=2) }}"
 
     shortner_image: ghcr.io/clayman-micro/shortner
     shortner_version: "{{ lookup('env','SHORTNER_VERSION')|default('latest') }}"
@@ -23,7 +54,7 @@
   tasks:
     - name: Log into private registry
       docker_login:
-        registry: ghcr.io
+        registry: "{{ docker_registry }}"
         username: "{{ docker_username }}"
         password: "{{ docker_password }}"
 

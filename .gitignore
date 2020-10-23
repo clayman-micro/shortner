@@ -53,6 +53,7 @@ nosetests.xml
 .venv
 .vscode/.ropeproject
 .vscode/tags
+ansible/.credentials
 *.retry
 *.sublime-project
 *.sublime-workspace
