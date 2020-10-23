@@ -2,6 +2,8 @@
 NAME	:= ghcr.io/clayman-micro/shortner
 VERSION ?= latest
 
+CWD := ${PWD}
+
 
 clean: clean-build clean-image clean-pyc clean-test
 
@@ -63,3 +65,6 @@ build:
 publish:
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push ${NAME}:$(VERSION)
+
+deploy:
+	docker run --rm -it -v ${PWD}:/github/workspace --workdir /github/workspace -e SHORTNER_VERSION=$(VERSION) -e VAULT_ADDR=$(VAULT_ADDR) -e VAULT_ROLE_ID=$(VAULT_ROLE_ID) -e VAULT_SECRET_ID=$(VAULT_SECRET_ID) ghcr.io/clayman-micro/action-deploy -i ansible/inventory ansible/deploy.yml
