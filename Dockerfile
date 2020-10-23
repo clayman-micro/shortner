@@ -1,4 +1,4 @@
-FROM python:3.8-slim as build
+FROM python:3.9-slim as build
 
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && apt-get install -y -q \
@@ -13,7 +13,7 @@ WORKDIR /app
 RUN poetry build
 
 
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 COPY --from=build /app/dist/*.whl .
 
